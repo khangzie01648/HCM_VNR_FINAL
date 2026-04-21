@@ -155,21 +155,7 @@ export const getSheets = () => [
             <p className="m-0">(9), (10), (11) Hồ Chí Minh: Toàn tập, Sđd, t.13 và t.14 - Phân biệt bạn và thù.</p>
             <p className="m-0">(14), (15), (16) Hồ Chí Minh: Toàn tập & Biên niên tiểu sử - Dĩ bất biến ứng vạn biến.</p>
             <p className="m-0">(17)-(23) ĐCSVN: Văn kiện Đại hội XIII, tr.161-164, tr.25, tr.110 - Trọng yếu quốc gia ta.</p>
-            <div className="flex justify-center opacity-10">
-               <Star className="w-12 h-12 text-red-900" />
-            </div>
-         </div>
-      )
-   },
-   {
-      front: (
-         <div className="flex flex-col items-center justify-center h-full opacity-10">
-            <Star className="w-40 h-40 text-red-900" />
-         </div>
-      ),
-      back: (
-         <div className="flex flex-col items-center justify-center h-full text-center">
-            <p className="text-red-900/10 font-serif italic text-4xl">Hết.</p>
+            <p className="m-0">(17)-(23) ĐCSVN: Văn kiện Đại hội XIII, tr.161-164, tr.25, tr.110 - Trọng yếu quốc gia ta.</p>
          </div>
       )
    }

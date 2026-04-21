@@ -1,58 +1,61 @@
 import { motion } from 'framer-motion';
 import React from 'react';
+import { Star } from 'lucide-react';
 import { getSheets } from './bookData';
 
 interface LegacyBookProps {
    currentPage: number;
    setCurrentPage: (page: number | ((p: number) => number)) => void;
    finalPoster: string;
+   backCover?: string;
 }
 
-const LegacyBook: React.FC<LegacyBookProps> = ({ 
-   currentPage, 
-   setCurrentPage, 
-   finalPoster 
+const LegacyBook: React.FC<LegacyBookProps> = ({
+   currentPage,
+   setCurrentPage,
+   finalPoster,
+   backCover
 }) => {
    const sheets = getSheets();
    const totalSheets = sheets.length;
 
    return (
       <div className="relative w-full h-full flex items-center justify-center p-20 text-black">
-         <motion.div 
-            key="unified-book" 
-            animate={{ 
-               opacity: 1, 
-               scale: 1, 
-               y: 0, 
-               x: currentPage === 0 ? "-25%" : "0%" 
-            }} 
-            transition={{ duration: 1.2 }} 
-            className="relative w-full max-w-[1700px] aspect-[16/9.5]" 
+         <motion.div
+            key="unified-book"
+            animate={{
+               opacity: 1,
+               scale: 1,
+               y: 0,
+               x: currentPage === 0 ? "-25%" : (currentPage >= totalSheets + 2 ? "25%" : "0%")
+            }}
+            transition={{ duration: 1.2 }}
+            className="relative w-full max-w-[1700px] aspect-[16/9.5]"
             style={{ transformStyle: 'preserve-3d' }}
          >
             <div className="w-full h-full relative book-3d">
                {/* BINDER EFFECTS */}
-               <div 
-                  className={`absolute left-0 top-1 bottom-1 bg-white/90 rounded-l-2xl border-l-[8px] border-black/5 stack-edge-right transition-all duration-700 ${currentPage === 0 ? 'opacity-0' : 'opacity-100'}`} 
-                  style={{ 
-                     width: `${(currentPage / (totalSheets + 1)) * 40}px`, 
-                     left: `-${(currentPage / (totalSheets + 1)) * 40}px` 
-                  }} 
+               <div
+                  className={`absolute left-0 top-1 bottom-1 bg-white/90 rounded-l-2xl border-l-[8px] border-black/5 stack-edge-right transition-all duration-700 ${currentPage === 0 ? 'opacity-0' : 'opacity-100'}`}
+                  style={{
+                     width: `${(currentPage / (totalSheets + 2)) * 40}px`,
+                     left: `-${(currentPage / (totalSheets + 2)) * 40}px`
+                  }}
                />
-               <div 
-                  className="absolute right-0 top-1 bottom-1 bg-white/90 rounded-r-2xl border-r-[8px] border-black/5 stack-edge-right transition-all duration-700" 
-                  style={{ 
-                     width: `${((totalSheets + 1 - currentPage) / (totalSheets + 1)) * 40}px`, 
-                     right: `-${((totalSheets + 1 - currentPage) / (totalSheets + 1)) * 40}px` 
-                  }} 
+               <div
+                  className="absolute right-0 top-1 bottom-1 bg-white/90 rounded-r-2xl border-r-[8px] border-black/5 stack-edge-right transition-all duration-700"
+                  style={{
+                     width: `${((totalSheets + 2 - currentPage) / (totalSheets + 2)) * 40}px`,
+                     right: `-${((totalSheets + 2 - currentPage) / (totalSheets + 2)) * 40}px`
+                  }}
                />
                <div className="absolute inset-0 grid grid-cols-2 shadow-2xl">
                   <div className={`page-soft-gradient rounded-l-[15px] border-r border-black/5 shadow-inner transition-opacity duration-700 ${currentPage === 0 ? 'opacity-0' : 'opacity-100'}`} />
-                  <div className="page-soft-gradient rounded-r-[15px] border-l border-black/5 shadow-inner" />
+                  <div className={`page-soft-gradient rounded-r-[15px] border-l border-black/5 shadow-inner transition-opacity duration-700 ${currentPage >= totalSheets + 2 ? 'opacity-0' : 'opacity-100'}`} />
                </div>
 
                <div className="absolute inset-y-0 left-0 w-1/2 z-[200] cursor-pointer" onClick={() => setCurrentPage(p => Math.max(0, p - 1))} />
-               <div className="absolute inset-y-0 right-0 w-1/2 z-[200] cursor-pointer" onClick={() => setCurrentPage(p => Math.min(totalSheets, p + 1))} />
+               <div className="absolute inset-y-0 right-0 w-1/2 z-[200] cursor-pointer" onClick={() => setCurrentPage(p => Math.min(totalSheets + 2, p + 1))} />
 
                {/* SHEET 0 - COVER */}
                <div className="sheet" style={{ zIndex: currentPage === 0 ? 100 : 5, transform: `rotateY(${currentPage > 0 ? -180 : 0}deg)` }}>
@@ -78,11 +81,27 @@ const LegacyBook: React.FC<LegacyBookProps> = ({
 
                {/* MASTER CONTENT SHEETS */}
                {sheets.map((sheet, index) => (
-                  <div key={index} className="sheet" style={{ zIndex: currentPage > index + 1 ? index + 10 : totalSheets - index + 10, transform: `rotateY(${currentPage > index + 1 ? -180 : 0}deg)` }}>
+                  <div key={index} className="sheet" style={{ zIndex: currentPage > index + 1 ? index + 10 : totalSheets + 1 - index + 10, transform: `rotateY(${currentPage > index + 1 ? -180 : 0}deg)` }}>
                      <div className="page page-front page-soft-gradient rounded-r-[15px] p-8 lg:p-12 overflow-y-auto no-scrollbar forced-black-ink hover:z-50"><div className="absolute inset-0 gutter-shadow opacity-50 z-20 pointer-events-none" />{sheet.front}</div>
                      <div className="page page-back page-soft-gradient rounded-l-[15px] p-8 lg:p-12 overflow-y-auto no-scrollbar forced-black-ink hover:z-50"><div className="absolute inset-0 gutter-shadow opacity-50 z-20 pointer-events-none" />{sheet.back}</div>
                   </div>
                ))}
+
+               {/* SHEET LAST - BACK COVER */}
+               <div className="sheet" style={{ zIndex: currentPage >= totalSheets + 1 ? 100 : 5, transform: `rotateY(${currentPage >= totalSheets + 2 ? -180 : 0}deg)` }}>
+                  <div className="page page-front page-soft-gradient rounded-r-[15px] p-8 lg:p-12 overflow-y-auto no-scrollbar forced-black-ink hover:z-50">
+                     <div className="absolute inset-0 gutter-shadow opacity-50 z-20 pointer-events-none" />
+                  </div>
+                  <div className="page page-back rounded-l-[15px] overflow-hidden shadow-2xl p-0">
+                     <div className="w-full h-full bg-[#1e0808] border-r-[20px] border-[#3a0a0a] relative overflow-hidden">
+                        {backCover && <img src={backCover} className="w-full h-full object-cover" alt="Back Cover" />}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40" />
+                        <div className="absolute bottom-12 left-0 right-0 text-center text-white/40 uppercase tracking-[0.4em] text-[10px]">
+                           Trang cuối di sản
+                        </div>
+                     </div>
+                  </div>
+               </div>
 
                <div className="absolute left-1/2 top-0 bottom-0 w-[4px] -translate-x-1/2 bg-black/20 z-[250] blur-[1.5px]" />
             </div>

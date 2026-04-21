@@ -62,6 +62,8 @@ import BacTrongDaiHoi14 from "@root/ảnh bác Trọng.png";
 // @ts-ignore
 import ngoaiGiaoBanner from "@root/ngoaigiao.png";
 // @ts-ignore
+// @ts-ignore
+import thirtyFourCities from "@root/34tinhthanh.jpg";
 import iconBtn from "@root/icon.jpg";
 
 interface SectionProps {
@@ -168,14 +170,14 @@ export default function Home() {
                         {/* THE LIGHT OF THE PARTY - Radiant Auras */}
                         <div className="absolute inset-0 bg-red-600/30 blur-[100px] rounded-full scale-[2.5] animate-pulse pointer-events-none" />
                         <div className="absolute inset-0 bg-[#D4AF37]/20 blur-[60px] rounded-full scale-[2] animate-pulse delay-700 pointer-events-none" />
-                        
+
                         {/* Rotating Sacred Halos */}
                         <motion.div
                            animate={{ rotate: 360 }}
                            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                            className="absolute inset-0 border border-red-500/20 border-dashed rounded-full scale-[1.8] pointer-events-none"
                         />
-                         <motion.div
+                        <motion.div
                            animate={{ rotate: -360 }}
                            transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
                            className="absolute inset-0 border border-[#D4AF37]/10 border-dashed rounded-full scale-[2.2] pointer-events-none"
@@ -188,14 +190,14 @@ export default function Home() {
                            className="group relative rounded-2xl overflow-hidden p-[2px] bg-gradient-to-br from-red-600 via-[#D4AF37] to-red-600 shadow-[0_0_80px_rgba(220,38,38,0.6)] perspective-1000"
                         >
                            <div className="relative rounded-[calc(1rem-2px)] overflow-hidden bg-black">
-                              <img 
-                                 src={iconBtn} 
-                                 className="h-16 lg:h-28 w-auto object-cover group-hover:scale-110 brightness-125 saturate-150 transition-all duration-700" 
-                                 alt="Chọn Chương" 
+                              <img
+                                 src={iconBtn}
+                                 className="h-16 lg:h-28 w-auto object-cover group-hover:scale-110 brightness-125 saturate-150 transition-all duration-700"
+                                 alt="Chọn Chương"
                               />
                               {/* Divine Glow Overlay */}
                               <div className="absolute inset-0 bg-gradient-to-t from-red-600/40 via-transparent to-[#D4AF37]/20 z-10" />
-                              
+
                               {/* Radiant Sweep */}
                               <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/40 to-transparent -translate-x-[200%] group-hover:translate-x-[200%] transition-transform duration-1000 z-20" />
                            </div>
@@ -503,6 +505,7 @@ export default function Home() {
                   currentPage={currentPage}
                   setCurrentPage={setCurrentPage}
                   finalPoster={FinalPoster}
+                  backCover={thirtyFourCities}
                />
             </div>
          </Section>
@@ -682,40 +685,33 @@ export default function Home() {
                         “ứng vạn biến” <br />
                         <span className="text-xl lg:text-3xl not-italic ml-4 text-white/90">và kỳ vọng từ Đại hội XIV</span>
                      </span>
-                     {/* Decorative underline */}
                      <div className="w-24 h-[2px] bg-gradient-to-r from-[#D4AF37] to-transparent mt-6 shadow-[0_0_15px_rgba(212,175,55,0.6)]" />
+                  </h2>
 
-                     {/* Restored Video Button */}
-                     <div className="flex justify-start mt-12">
+                  <div className="flex items-center gap-8 mt-12">
+                     <motion.div
+                        layout
+                        onClick={() => setShowVideo("PWNGqF6ahcA")}
+                        className="group relative flex items-center cursor-pointer"
+                     >
                         <motion.div
                            layout
-                           onClick={() => setShowVideo("qtDggMIbgyw")}
-                           className="group relative flex items-center cursor-pointer"
+                           className="relative z-20 w-16 h-16 bg-gradient-to-br from-[#D4AF37] via-[#f7e09a] to-[#B8860B] rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(212,175,55,0.4)] group-hover:shadow-[0_0_60px_rgba(212,175,55,0.6)] transition-all duration-500"
                         >
+                           <Play size={22} className="text-black fill-black ml-1 group-hover:scale-110 transition-transform" />
                            <motion.div
-                              layout
-                              className="relative z-20 w-16 h-16 bg-gradient-to-br from-[#D4AF37] via-[#f7e09a] to-[#B8860B] rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(212,175,55,0.4)] group-hover:shadow-[0_0_60px_rgba(212,175,55,0.6)] transition-all duration-500"
-                           >
-                              <Play size={22} className="text-black fill-black ml-1 group-hover:scale-110 transition-transform" />
-                              <motion.div
-                                 animate={{ rotate: 360 }}
-                                 transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                                 className="absolute inset-[-6px] border border-[#D4AF37]/40 rounded-full border-dashed"
-                              />
-                           </motion.div>
-
-                           <motion.div
-                              layout
-                              className="absolute left-8 h-12 pr-12 pl-8 bg-black/90 backdrop-blur-3xl border border-[#D4AF37]/20 rounded-r-full flex items-center justify-center opacity-0 group-hover:opacity-100 group-hover:left-full group-hover:translate-x-[-10px] transition-all duration-500 pointer-events-none"
-                           >
-                              <div className="flex flex-col items-start whitespace-nowrap overflow-hidden">
-                                 <span className="text-[11px] font-black text-[#D4AF37] uppercase tracking-[0.4em] font-outfit">XEM PHIM TƯ LIỆU</span>
-                                 <span className="text-[8px] text-white/40 uppercase tracking-[0.2em] font-bold mt-[2px] font-outfit">TẦM NHÌN NGOẠI GIAO</span>
-                              </div>
-                           </motion.div>
+                              animate={{ rotate: 360 }}
+                              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                              className="absolute inset-[-6px] border border-[#D4AF37]/40 rounded-full border-dashed"
+                           />
                         </motion.div>
-                     </div>
-                  </h2>
+
+                        <div className="flex flex-col items-start whitespace-nowrap overflow-hidden ml-4">
+                           <span className="text-[11px] font-black text-[#D4AF37] uppercase tracking-[0.4em] font-outfit">XEM PHIM TƯ LIỆU</span>
+                           <span className="text-[8px] text-white/40 uppercase tracking-[0.2em] font-bold mt-[2px] font-outfit">TẦM NHÌN ĐẠI HỘI XIV</span>
+                        </div>
+                     </motion.div>
+                  </div>
                </motion.div>
             </div>
          </Section>
@@ -732,9 +728,9 @@ export default function Home() {
                         key={i}
                         initial={{ opacity: 0, y: "100vh" }}
                         animate={{ opacity: 0.6, y: "-10vh" }}
-                        transition={{ 
-                           duration: 4 + Math.random() * 6, 
-                           delay: Math.random() * 8, 
+                        transition={{
+                           duration: 4 + Math.random() * 6,
+                           delay: Math.random() * 8,
                            repeat: Infinity,
                            ease: "linear"
                         }}
@@ -759,7 +755,7 @@ export default function Home() {
                </motion.div>
 
                <div className="relative group perspective-3000">
-                  <motion.div 
+                  <motion.div
                      ref={tourFrameRef}
                      initial={{ rotateX: 5, y: 30, opacity: 0 }}
                      whileInView={{ rotateX: 0, y: 0, opacity: 1 }}
@@ -768,10 +764,10 @@ export default function Home() {
                   >
                      {/* Cinematic Vignette Overlay */}
                      <div className="absolute inset-0 z-10 pointer-events-none shadow-[inset_0_0_150px_rgba(0,0,0,0.8)] ring-1 ring-inset ring-white/10" />
-                     
+
                      <AnimatePresence>
                         {!isTourLoaded && (
-                           <motion.div 
+                           <motion.div
                               initial={{ opacity: 0 }}
                               animate={{ opacity: 1 }}
                               exit={{ opacity: 0 }}
@@ -779,7 +775,7 @@ export default function Home() {
                               onClick={() => setIsTourLoaded(true)}
                            >
                               <div className="absolute inset-0 bg-gradient-to-t from-red-900/40 via-transparent to-red-900/20" />
-                              <motion.div 
+                              <motion.div
                                  whileHover={{ scale: 1.15, rotate: 5 }}
                                  whileTap={{ scale: 0.9 }}
                                  className="relative z-30 w-28 h-28 rounded-full bg-gradient-to-br from-[#D4AF37] to-[#B8860B] flex items-center justify-center mb-8 shadow-[0_0_60px_rgba(212,175,55,0.5)]"
@@ -803,7 +799,7 @@ export default function Home() {
                   </motion.div>
 
                   <div className="mt-12 flex justify-center gap-6">
-                     <button 
+                     <button
                         onClick={handleTourFullscreen}
                         className="flex items-center gap-4 px-10 py-4 bg-white/5 hover:bg-[#D4AF37] hover:text-black border border-white/10 rounded-full text-white text-[10px] font-black uppercase tracking-[0.4em] transition-all"
                      >

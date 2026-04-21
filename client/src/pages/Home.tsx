@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
    Star,
    ChevronRight,
@@ -10,7 +10,8 @@ import {
    ZoomIn,
    ZoomOut,
    Play,
-   Quote
+   Quote,
+   Maximize
 } from 'lucide-react';
 import LegacyBook from '../components/portal/LegacyBook';
 
@@ -60,6 +61,10 @@ import td7Bg from "@root/assets/TD7.jpg";
 import BacTrongDaiHoi14 from "@root/ảnh bác Trọng.png";
 // @ts-ignore
 import ngoaiGiaoBanner from "@root/ngoaigiao.png";
+// @ts-ignore
+// @ts-ignore
+import thirtyFourCities from "@root/34tinhthanh.jpg";
+import iconBtn from "@root/icon.jpg";
 
 interface SectionProps {
    children: React.ReactNode;
@@ -80,11 +85,23 @@ const Section = ({ children, className = "", style = {}, id = "" }: SectionProps
 
 export default function Home() {
    const [isMuted] = useState(true);
+   const [isTourLoaded, setIsTourLoaded] = useState(false);
+   const tourFrameRef = useRef<HTMLDivElement>(null);
    const [showVideo, setShowVideo] = useState<string | null>(null);
    const [selectedImg, setSelectedImg] = useState<any>(null);
    const [currentPage, setCurrentPage] = useState(0);
    const [activeSection, setActiveSection] = useState('Khởi đầu');
    const [isMapOpen, setIsMapOpen] = useState(false);
+
+   const handleTourFullscreen = () => {
+      if (!tourFrameRef.current) return;
+      if (!isTourLoaded) setIsTourLoaded(true);
+      if (tourFrameRef.current.requestFullscreen) {
+         tourFrameRef.current.requestFullscreen();
+      } else if ((tourFrameRef.current as any).webkitRequestFullscreen) {
+         (tourFrameRef.current as any).webkitRequestFullscreen();
+      }
+   };
 
    useEffect(() => {
       const observer = new IntersectionObserver((entries) => {
@@ -125,15 +142,9 @@ export default function Home() {
             <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-[#080404]/60" />
          </div>
 
-         <nav className="fixed top-0 left-0 w-full z-50 px-12 py-10 flex justify-end items-center bg-gradient-to-b from-black/80 to-transparent">
+         <nav className="fixed top-0 left-0 w-full z-50 px-12 py-10 flex justify-center items-center bg-gradient-to-b from-black/80 to-transparent">
             <div className="hidden lg:flex items-center gap-12 text-[10px] font-bold uppercase tracking-[0.3em] text-white/40">
                {['Khởi đầu', 'Hành trình', 'Giá trị', 'Phòng chiếu', 'Nghiên cứu', 'Di sản', 'Sự kiện', 'Triển lãm', 'Đại hội XIV', 'Tầm nhìn', 'Tour'].map(item => (activeSection === item ? <span key={item} className="text-[#D4AF37] font-black">{item}</span> : <a key={item} href={`#${item}`} className="hover:text-[#D4AF37] transition-all">{item}</a>))}
-               <div className="flex gap-6 items-center border-l border-white/10 pl-12">
-                  <Search size={18} className="text-white/40 hover:text-white cursor-pointer" />
-                  <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center cursor-pointer hover:bg-white/5">
-                     <Menu size={18} className="text-white" />
-                  </div>
-               </div>
             </div>
          </nav>
 
@@ -151,21 +162,48 @@ export default function Home() {
                      transition={{ delay: 1.5 }}
                      className="flex justify-center"
                   >
-                     <button
-                        onClick={() => setIsMapOpen(true)}
-                        className="group relative px-12 py-5 bg-white/5 backdrop-blur-2xl border border-white/20 rounded-full hover:border-[#D4AF37]/50 transition-all duration-500 overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] hover:shadow-[0_0_50px_rgba(212,175,55,0.2)]"
+                     <motion.div
+                        animate={{ y: [0, -10, 0] }}
+                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                        className="relative flex flex-col items-center gap-6"
                      >
-                        <div className="absolute inset-0 bg-gradient-to-r from-[#D4AF37]/0 via-[#D4AF37]/10 to-[#D4AF37]/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-                        <div className="relative flex items-center gap-4">
-                           <div className="w-10 h-10 rounded-full bg-[#D4AF37] flex items-center justify-center text-black shadow-lg">
-                              <Maximize2 size={20} className="group-hover:scale-110 transition-transform" />
+                        {/* THE LIGHT OF THE PARTY - Radiant Auras */}
+                        <div className="absolute inset-0 bg-red-600/30 blur-[100px] rounded-full scale-[2.5] animate-pulse pointer-events-none" />
+                        <div className="absolute inset-0 bg-[#D4AF37]/20 blur-[60px] rounded-full scale-[2] animate-pulse delay-700 pointer-events-none" />
+
+                        {/* Rotating Sacred Halos */}
+                        <motion.div
+                           animate={{ rotate: 360 }}
+                           transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                           className="absolute inset-0 border border-red-500/20 border-dashed rounded-full scale-[1.8] pointer-events-none"
+                        />
+                        <motion.div
+                           animate={{ rotate: -360 }}
+                           transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                           className="absolute inset-0 border border-[#D4AF37]/10 border-dashed rounded-full scale-[2.2] pointer-events-none"
+                        />
+
+                        <motion.button
+                           onClick={() => setIsMapOpen(true)}
+                           whileHover={{ scale: 1.1, rotateY: 10 }}
+                           whileTap={{ scale: 0.95 }}
+                           className="group relative rounded-2xl overflow-hidden p-[2px] bg-gradient-to-br from-red-600 via-[#D4AF37] to-red-600 shadow-[0_0_80px_rgba(220,38,38,0.6)] perspective-1000"
+                        >
+                           <div className="relative rounded-[calc(1rem-2px)] overflow-hidden bg-black">
+                              <img
+                                 src={iconBtn}
+                                 className="h-16 lg:h-28 w-auto object-cover group-hover:scale-110 brightness-125 saturate-150 transition-all duration-700"
+                                 alt="Chọn Chương"
+                              />
+                              {/* Divine Glow Overlay */}
+                              <div className="absolute inset-0 bg-gradient-to-t from-red-600/40 via-transparent to-[#D4AF37]/20 z-10" />
+
+                              {/* Radiant Sweep */}
+                              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/40 to-transparent -translate-x-[200%] group-hover:translate-x-[200%] transition-transform duration-1000 z-20" />
                            </div>
-                           <div className="text-left">
-                              <p className="text-[12px] font-black uppercase tracking-[0.3em] text-white group-hover:text-[#D4AF37] transition-colors leading-tight">CHỌN CHƯƠNG</p>
-                              <p className="text-[8px] font-bold uppercase tracking-[0.2em] text-white/30 group-hover:text-white/50 transition-colors mt-1">HÀNH TRÌNH BẢN SẮC</p>
-                           </div>
-                        </div>
-                     </button>
+                        </motion.button>
+
+                     </motion.div>
                   </motion.div>
 
                </motion.div>
@@ -224,34 +262,16 @@ export default function Home() {
                            transition={{ duration: 1.2 }}
                            className="relative z-30"
                         >
-                           <div className="flex items-center gap-6 mb-12">
-                              <div className="w-12 h-[3px] bg-red-600 shadow-[0_0_15px_rgba(220,38,38,1)]" />
-                              <span className="text-[#D4AF37] font-black text-[12px] uppercase tracking-[1.25em] drop-shadow-[0_0_10px_rgba(212,175,55,0.4)]">Mốc son 1930</span>
-                           </div>
-
-                           <h3 className="relative group/title font-playfair">
-                              <span className="block text-white text-7xl lg:text-[10rem] font-black uppercase leading-[0.75] tracking-tighter drop-shadow-[0_20px_50px_rgba(0,0,0,1)]">
-                                 HÀNH
+                           <h3 className="relative group/title font-playfair flex flex-col items-start gap-4">
+                              <span className="block text-white/90 text-2xl lg:text-4xl font-extrabold uppercase tracking-tight leading-none drop-shadow-md">
+                                 Hành trình cách mạng <br />
+                                 <span className="text-xl lg:text-3xl text-white/60 font-bold">của Nguyễn Ái Quốc</span>
                               </span>
-                              <span className="block text-transparent bg-clip-text bg-gradient-to-br from-[#D4AF37] via-[#FFF5D1] to-[#B8860B] text-6xl lg:text-[9rem] font-black uppercase italic leading-[0.8] tracking-tighter ml-12 lg:ml-20 drop-shadow-[0_10px_30px_rgba(184,134,11,0.5)]">
-                                 TRÌNH
+                              <span className="block text-transparent bg-clip-text bg-gradient-to-br from-[#D4AF37] via-[#FFF5D1] to-[#B8860B] text-3xl lg:text-6xl font-black uppercase italic leading-[1.1] tracking-tighter drop-shadow-[0_10px_20px_rgba(184,134,11,0.3)]">
+                                 Dẫn tới sự ra đời của <br />
+                                 <span className="not-italic text-white/90 text-2xl lg:text-5xl">Đảng Cộng sản Việt Nam</span>
                               </span>
-                              {/* Decorative Lens Flare on Title */}
-                              <div className="absolute top-1/2 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-red-600/30 to-transparent scale-x-0 group-hover/title:scale-x-100 transition-transform duration-1000" />
                            </h3>
-
-                           <div className="mt-16 flex gap-10 items-start pl-6 border-l-2 border-red-900/50 group/quote">
-                              <Quote className="text-red-700 w-12 h-12 opacity-30 shrink-0 group-hover/quote:opacity-60 transition-all duration-500" />
-                              <div className="space-y-6">
-                                 <p className="text-white/40 text-sm lg:text-lg leading-relaxed font-serif italic max-w-xl">
-                                    "Bước ngoặt vĩ đại chấm dứt cuộc khủng hoảng đường lối cứu nước, mở ra kỷ nguyên <span className="text-red-600/80 font-bold not-italic">Độc lập</span>, <span className="text-[#D4AF37]/80 font-bold not-italic">Tự do</span> cho dân tộc Việt Nam."
-                                 </p>
-                                 <div className="flex items-center gap-4">
-                                    <div className="w-12 h-[1px] bg-red-900/40" />
-                                    <span className="text-[10px] font-bold text-white/20 uppercase tracking-[0.4em]">Archival Document</span>
-                                 </div>
-                              </div>
-                           </div>
                         </motion.div>
                      </div>
 
@@ -315,12 +335,6 @@ export default function Home() {
                         <span className="text-transparent bg-clip-text bg-gradient-to-br from-[#D4AF37] via-[#f7e09a] to-[#B8860B]">TƯ TƯỞNG</span>
                      </h3>
 
-                     <div className="flex items-stretch gap-6 pl-1 mt-12 mb-12">
-                        <div className="w-[4px] bg-red-700/80 rounded-full shadow-[0_0_15px_rgba(185,28,28,0.6)]"></div>
-                        <p className="text-white/60 text-[12px] font-mono tracking-[0.25em] italic leading-relaxed py-1 uppercase font-outfit">
-                           “Gốc vững, thân chắc, <br /> cành uyển chuyển”
-                        </p>
-                     </div>
                   </motion.div>
                   <div className="space-y-12">
                      <div className="relative w-full max-w-[460px] aspect-video rounded-[3rem] overflow-hidden border border-white/10 shadow-[0_30px_60px_rgba(0,0,0,0.8)]">
@@ -491,6 +505,7 @@ export default function Home() {
                   currentPage={currentPage}
                   setCurrentPage={setCurrentPage}
                   finalPoster={FinalPoster}
+                  backCover={thirtyFourCities}
                />
             </div>
          </Section>
@@ -670,29 +685,129 @@ export default function Home() {
                         “ứng vạn biến” <br />
                         <span className="text-xl lg:text-3xl not-italic ml-4 text-white/90">và kỳ vọng từ Đại hội XIV</span>
                      </span>
-                     {/* Decorative underline */}
                      <div className="w-24 h-[2px] bg-gradient-to-r from-[#D4AF37] to-transparent mt-6 shadow-[0_0_15px_rgba(212,175,55,0.6)]" />
                   </h2>
+
+                  <div className="flex items-center gap-8 mt-12">
+                     <motion.div
+                        layout
+                        onClick={() => setShowVideo("PWNGqF6ahcA")}
+                        className="group relative flex items-center cursor-pointer"
+                     >
+                        <motion.div
+                           layout
+                           className="relative z-20 w-16 h-16 bg-gradient-to-br from-[#D4AF37] via-[#f7e09a] to-[#B8860B] rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(212,175,55,0.4)] group-hover:shadow-[0_0_60px_rgba(212,175,55,0.6)] transition-all duration-500"
+                        >
+                           <Play size={22} className="text-black fill-black ml-1 group-hover:scale-110 transition-transform" />
+                           <motion.div
+                              animate={{ rotate: 360 }}
+                              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                              className="absolute inset-[-6px] border border-[#D4AF37]/40 rounded-full border-dashed"
+                           />
+                        </motion.div>
+
+                        <div className="flex flex-col items-start whitespace-nowrap overflow-hidden ml-4">
+                           <span className="text-[11px] font-black text-[#D4AF37] uppercase tracking-[0.4em] font-outfit">XEM PHIM TƯ LIỆU</span>
+                           <span className="text-[8px] text-white/40 uppercase tracking-[0.2em] font-bold mt-[2px] font-outfit">TẦM NHÌN ĐẠI HỘI XIV</span>
+                        </div>
+                     </motion.div>
+                  </div>
                </motion.div>
             </div>
          </Section>
 
-         <Section id="Tour" className="relative group overflow-hidden bg-black">
-            <div className="absolute inset-0 z-0 scale-110 group-hover:scale-100 transition-transform duration-[3s] ease-out">
-               <video autoPlay loop muted playsInline className="w-full h-full object-cover opacity-40 brightness-50">
+         <Section id="Tour" className="relative group overflow-hidden bg-black py-32">
+            <div className="absolute inset-0 z-0">
+               <video autoPlay loop muted playsInline className="w-full h-full object-cover opacity-80 brightness-[1.5]">
                   <source src={covn} type="video/mp4" />
                </video>
+               {/* Particles Background */}
+               <div className="absolute inset-0 pointer-events-none z-0">
+                  {Array.from({ length: 30 }).map((_, i) => (
+                     <motion.div
+                        key={i}
+                        initial={{ opacity: 0, y: "100vh" }}
+                        animate={{ opacity: 0.6, y: "-10vh" }}
+                        transition={{
+                           duration: 4 + Math.random() * 6,
+                           delay: Math.random() * 8,
+                           repeat: Infinity,
+                           ease: "linear"
+                        }}
+                        className="absolute w-[3px] h-[3px] bg-red-500 rounded-full blur-[1px]"
+                        style={{ left: Math.random() * 100 + '%' }}
+                     />
+                  ))}
+               </div>
             </div>
-            <div className="relative z-10 text-center px-12">
-               <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 1.2 }}>
-                  <div className="w-20 h-20 rounded-full border border-[#D4AF37]/30 flex items-center justify-center mx-auto mb-10 group/play cursor-pointer" onClick={() => window.location.href = '/virtual-tour'}>
-                     <div className="w-14 h-14 bg-[#D4AF37] rounded-full flex items-center justify-center text-black group-hover/play:scale-110 transition-transform">
-                        <Play size={24} fill="currentColor" />
-                     </div>
-                  </div>
-                  <h3 className="text-white text-5xl lg:text-8xl font-black uppercase mb-6 tracking-tighter font-playfair">VIRTUAL TOUR <span className="text-[#D4AF37]">360°</span></h3>
-                  <button onClick={() => window.location.href = '/virtual-tour'} className="px-20 py-8 bg-transparent border border-[#D4AF37]/50 rounded-full text-[#D4AF37] text-[12px] font-black uppercase tracking-[0.5em] hover:bg-[#D4AF37] hover:text-black transition-all font-outfit">Bắt đầu hành trình</button>
+
+            <div className="relative z-10 w-full max-w-6xl mx-auto px-6 text-center">
+               <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 1.2 }}>
+                  <span className="inline-block px-6 py-2 bg-red-600/30 border border-[#D4AF37]/50 rounded-full text-[10px] font-black text-[#D4AF37] uppercase tracking-[0.4em] mb-8 shadow-[0_0_20px_rgba(220,38,38,0.3)]">
+                     Trải Nghiệm Đỉnh Cao
+                  </span>
+                  <h3 className="text-white text-5xl lg:text-7xl font-black uppercase mb-6 tracking-tighter font-playfair drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
+                     TRUNG TÂM <span className="text-[#D4AF37]">HỘI NGHỊ QUỐC GIA</span>
+                  </h3>
+                  <p className="text-white/60 max-w-2xl mx-auto mb-16 text-sm lg:text-base font-medium drop-shadow-md">
+                     Khám phá không gian kiến trúc hùng vĩ và hiện đại của nơi diễn ra các sự kiện trọng đại của đất nước qua góc nhìn 360 độ.
+                  </p>
                </motion.div>
+
+               <div className="relative group perspective-3000">
+                  <motion.div
+                     ref={tourFrameRef}
+                     initial={{ rotateX: 5, y: 30, opacity: 0 }}
+                     whileInView={{ rotateX: 0, y: 0, opacity: 1 }}
+                     transition={{ duration: 1 }}
+                     className="relative aspect-video w-full rounded-3xl overflow-hidden bg-gray-950 shadow-[0_50px_150px_rgba(0,0,0,1)] border border-white/10"
+                  >
+                     {/* Cinematic Vignette Overlay */}
+                     <div className="absolute inset-0 z-10 pointer-events-none shadow-[inset_0_0_150px_rgba(0,0,0,0.8)] ring-1 ring-inset ring-white/10" />
+
+                     <AnimatePresence>
+                        {!isTourLoaded && (
+                           <motion.div
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              exit={{ opacity: 0 }}
+                              className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/40 backdrop-blur-3xl cursor-pointer hover:bg-black/20 transition-colors"
+                              onClick={() => setIsTourLoaded(true)}
+                           >
+                              <div className="absolute inset-0 bg-gradient-to-t from-red-900/40 via-transparent to-red-900/20" />
+                              <motion.div
+                                 whileHover={{ scale: 1.15, rotate: 5 }}
+                                 whileTap={{ scale: 0.9 }}
+                                 className="relative z-30 w-28 h-28 rounded-full bg-gradient-to-br from-[#D4AF37] to-[#B8860B] flex items-center justify-center mb-8 shadow-[0_0_60px_rgba(212,175,55,0.5)]"
+                              >
+                                 <Play size={44} className="text-black fill-black ml-2" />
+                              </motion.div>
+                              <h4 className="relative z-30 text-white text-3xl font-black uppercase tracking-[0.2em] mb-3 font-playfair drop-shadow-[0_5px_15px_rgba(0,0,0,1)]">Bắt Đầu Hành Trình</h4>
+                              <p className="relative z-30 text-[#D4AF37] text-sm font-black uppercase tracking-[0.4em] drop-shadow-md">Nhấn để khám phá không gian ảo 360°</p>
+                           </motion.div>
+                        )}
+                     </AnimatePresence>
+
+                     {isTourLoaded && (
+                        <iframe
+                           src="https://ncc.gov.vn/vr/"
+                           className="w-full h-full border-0 relative z-0"
+                           title="NCC VR Tour"
+                           allowFullScreen
+                        />
+                     )}
+                  </motion.div>
+
+                  <div className="mt-12 flex justify-center gap-6">
+                     <button
+                        onClick={handleTourFullscreen}
+                        className="flex items-center gap-4 px-10 py-4 bg-white/5 hover:bg-[#D4AF37] hover:text-black border border-white/10 rounded-full text-white text-[10px] font-black uppercase tracking-[0.4em] transition-all"
+                     >
+                        <Maximize className="w-4 h-4" />
+                        Mở Toàn Màn Hình
+                     </button>
+                  </div>
+               </div>
             </div>
          </Section>
 
