@@ -11,9 +11,11 @@ import {
    ZoomOut,
    Play,
    Quote,
-   Maximize
+   Maximize,
+   Info
 } from 'lucide-react';
 import LegacyBook from '../components/portal/LegacyBook';
+import CompactInfoCard from '../components/portal/CompactInfoCard';
 
 import MuseumWall from '../components/portal/MuseumWall';
 
@@ -65,6 +67,8 @@ import ngoaiGiaoBanner from "@root/ngoaigiao.png";
 // @ts-ignore
 import thirtyFourCities from "@root/34tinhthanh.jpg";
 import iconBtn from "@root/icon.jpg";
+// @ts-ignore
+import vnFlagIcon from "@root/co-viet-nam-nho.png";
 
 interface SectionProps {
    children: React.ReactNode;
@@ -92,6 +96,7 @@ export default function Home() {
    const [currentPage, setCurrentPage] = useState(0);
    const [activeSection, setActiveSection] = useState('Khởi đầu');
    const [isMapOpen, setIsMapOpen] = useState(false);
+   const [isInfoOpen, setIsInfoOpen] = useState(false);
 
    const handleTourFullscreen = () => {
       if (!tourFrameRef.current) return;
@@ -145,6 +150,25 @@ export default function Home() {
          <nav className="fixed top-0 left-0 w-full z-50 px-12 py-10 flex justify-center items-center bg-gradient-to-b from-black/80 to-transparent">
             <div className="hidden lg:flex items-center gap-12 text-[10px] font-bold uppercase tracking-[0.3em] text-white/40">
                {['Khởi đầu', 'Hành trình', 'Giá trị', 'Phòng chiếu', 'Nghiên cứu', 'Di sản', 'Sự kiện', 'Triển lãm', 'Đại hội XIV', 'Tầm nhìn', 'Tour'].map(item => (activeSection === item ? <span key={item} className="text-[#D4AF37] font-black">{item}</span> : <a key={item} href={`#${item}`} className="hover:text-[#D4AF37] transition-all">{item}</a>))}
+            </div>
+
+            {/* Original Stable Toggle */}
+            <div className="absolute right-12">
+               <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => setIsInfoOpen(!isInfoOpen)}
+                  className={`w-10 h-10 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 overflow-hidden border ${isInfoOpen
+                     ? 'border-[#D4AF37] bg-[#D4AF37]/20 shadow-lg'
+                     : 'border-[#D4AF37]/30 bg-black/60 backdrop-blur-xl'
+                     }`}
+               >
+                  <img
+                     src={vnFlagIcon}
+                     className={`w-full h-full object-cover transition-all duration-500 ${isInfoOpen ? 'scale-110 brightness-110' : 'opacity-80 hover:opacity-100'}`}
+                     alt="Info"
+                  />
+               </motion.button>
             </div>
          </nav>
 
@@ -434,10 +458,13 @@ export default function Home() {
             </div>
          </Section>
 
-         <Section id="Nghiên cứu" className="!p-0 bg-[#080404] overflow-hidden">
+         <Section id="Nghiên cứu" className="!p-0 bg-[#080404] overflow-hidden group">
             <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
-               <motion.img initial={{ opacity: 0, scale: 1.05 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 2.5 }} src={BacNPT} alt="Bac Trong Background" className="w-full h-full object-cover object-center filter brightness-[1.1] contrast-[1.15]" />
-               <div className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-[#080404] via-[#080404]/40 to-transparent z-30" />
+               <motion.img initial={{ opacity: 0, scale: 1.05 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 2.5 }} src={BacNPT} alt="Bac Trong Background" className="w-full h-full object-cover object-center filter brightness-[1.0] contrast-[1.2] relative z-10" />
+               <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover opacity-50 z-20 mix-blend-screen blur-[1.5px]">
+                  <source src={covn} type="video/mp4" />
+               </video>
+               <div className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-[#080404] via-[#080404]/60 to-transparent z-30" />
             </div>
             <div className="relative w-full h-full max-w-[1920px] mx-auto z-40 flex flex-col justify-center text-left">
                <div className="px-12 lg:px-44 w-full lg:w-3/5">
@@ -569,16 +596,19 @@ export default function Home() {
             <MuseumWall onSelectImg={setSelectedImg} />
          </Section>
 
-         <Section id="Đại hội XIV" className="!p-0 bg-[#080404] overflow-hidden">
+         <Section id="Đại hội XIV" className="!p-0 bg-[#080404] overflow-hidden group">
             <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
                <motion.img
                   initial={{ opacity: 0, scale: 1.05 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 2.5 }}
                   src={BacTrongDaiHoi14}
-                  className="w-full h-full object-cover object-center filter brightness-[1.1] contrast-[1.1]"
+                  className="w-full h-full object-cover object-center filter brightness-[1.0] contrast-[1.1] relative z-10"
                   alt="Tổng Bí thư"
                />
+               <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover opacity-50 z-20 mix-blend-screen blur-[1.5px]">
+                  <source src={covn} type="video/mp4" />
+               </video>
                {/* Gradient mask on the right */}
                <div className="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-[#080404] via-[#080404]/60 to-transparent z-30" />
             </div>
@@ -664,10 +694,13 @@ export default function Home() {
                   whileInView={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 2 }}
                   src={ngoaiGiaoBanner}
-                  className="w-full h-full object-cover filter brightness-[0.7] contrast-[1.1]"
+                  className="w-full h-full object-cover filter brightness-[0.9] contrast-[1.1] relative z-10"
                   alt="Banner"
                />
-               <div className="absolute inset-0 bg-gradient-to-t from-[#080404] via-transparent to-black/40 z-10" />
+               <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover opacity-50 z-20 mix-blend-screen blur-[1.5px]">
+                  <source src={covn} type="video/mp4" />
+               </video>
+               <div className="absolute inset-0 bg-gradient-to-t from-[#080404] via-transparent to-black/40 z-20" />
             </div>
             <div className="relative z-20 w-full max-w-7xl mx-auto px-12 lg:px-24 h-full flex items-center justify-start">
                <motion.div
@@ -718,8 +751,8 @@ export default function Home() {
 
          <Section id="Tour" className="relative group overflow-hidden bg-black py-32">
             <div className="absolute inset-0 z-0">
-               <video autoPlay loop muted playsInline className="w-full h-full object-cover opacity-80 brightness-[1.5]">
-                  <source src={covn} type="video/mp4" />
+               <video autoPlay loop muted playsInline className="w-full h-full object-cover opacity-40 brightness-110 blur-[1px]">
+                  <source src={trongdong} type="video/mp4" />
                </video>
                {/* Particles Background */}
                <div className="absolute inset-0 pointer-events-none z-0">
@@ -760,7 +793,7 @@ export default function Home() {
                      initial={{ rotateX: 5, y: 30, opacity: 0 }}
                      whileInView={{ rotateX: 0, y: 0, opacity: 1 }}
                      transition={{ duration: 1 }}
-                     className="relative aspect-video w-full rounded-3xl overflow-hidden bg-gray-950 shadow-[0_50px_150px_rgba(0,0,0,1)] border border-white/10"
+                     className="relative aspect-video w-full rounded-3xl overflow-hidden bg-white/[0.03] backdrop-blur-[2px] shadow-[0_50px_150px_rgba(0,0,0,0.5)] border border-white/20"
                   >
                      {/* Cinematic Vignette Overlay */}
                      <div className="absolute inset-0 z-10 pointer-events-none shadow-[inset_0_0_150px_rgba(0,0,0,0.8)] ring-1 ring-inset ring-white/10" />
@@ -771,10 +804,12 @@ export default function Home() {
                               initial={{ opacity: 0 }}
                               animate={{ opacity: 1 }}
                               exit={{ opacity: 0 }}
-                              className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/40 backdrop-blur-3xl cursor-pointer hover:bg-black/20 transition-colors"
+                              className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-transparent cursor-pointer group/mirror transition-all duration-500"
                               onClick={() => setIsTourLoaded(true)}
                            >
-                              <div className="absolute inset-0 bg-gradient-to-t from-red-900/40 via-transparent to-red-900/20" />
+                              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent -translate-x-full group-hover/mirror:translate-x-full transition-transform duration-[2s] ease-in-out" />
+                              <div className="absolute inset-0 border border-white/10 rounded-2xl" />
+
                               <motion.div
                                  whileHover={{ scale: 1.15, rotate: 5 }}
                                  whileTap={{ scale: 0.9 }}
@@ -854,10 +889,6 @@ export default function Home() {
                      <X size={24} />
                   </button>
 
-                  <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4 px-6 py-2 bg-black/40 border border-white/5 rounded-full backdrop-blur-md">
-                     <div className="w-2 h-2 bg-red-600 rounded-full animate-ping" />
-                     <span className="text-[10px] font-bold text-white/30 uppercase tracking-[0.4em] font-outfit">Archival Cinematic Environment</span>
-                  </div>
                </motion.div>
             </div>
          )}
@@ -899,7 +930,7 @@ export default function Home() {
 
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 pb-24">
                      {[
-                        { id: 'Hành trình', num: '02', title: 'HÀNH TRÌNH', desc: 'Mốc son chói lọi năm 1930', img: (typeof thanhlapDang === 'string' ? thanhlapDang : thanhlapDang) },
+                        { id: 'Hành trình', num: '02', title: 'HÀNH TRÌNH', desc: 'Mốc son chói lọi năm 1930', img: thanhlapDang },
                         { id: 'Giá trị', num: '03', title: 'GIÁ TRỊ', desc: 'Tư tưởng Hồ Chí Minh trong đối ngoại', img: hcmValueImage },
                         { id: 'Phòng chiếu', num: '04', title: 'PHÒNG CHIẾU', desc: 'Phòng chiếu phim tư liệu lịch sử', img: codangcovn },
                         { id: 'Nghiên cứu', num: '05', title: 'NGHIÊN CỨU', desc: 'Di sản ngoại giao Tổng Bí thư', img: BacNPT },
@@ -945,6 +976,12 @@ export default function Home() {
                </div>
             </motion.div>
          )}
+
+         <CompactInfoCard
+            isOpen={isInfoOpen}
+            onClose={() => setIsInfoOpen(false)}
+         />
+
 
       </main>
    );

@@ -1,6 +1,23 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* Compact Info Card Styles */
+.glass-compact {
+  background: rgba(10, 5, 5, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(212, 175, 55, 0.05);
+}
+
+.gold-text-glow {
+  color: #D4AF37;
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+.gold-border-gradient {
+  border-image: linear-gradient(to bottom, #D4AF37, transparent) 1;
+}
+
 /* Typography: Bold Communist & Elite Heritage Style */
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Montserrat:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&family=Roboto:wght@400;700;900&display=swap');
 
@@ -506,3 +523,4 @@
   font-size: 1.2rem;
   font-weight: 500;
 }
+
